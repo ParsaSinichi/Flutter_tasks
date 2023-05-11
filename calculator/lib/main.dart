@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const Calculator());
@@ -25,6 +26,53 @@ class simpleCalculator extends StatefulWidget {
 }
 
 class _simpleCalculatorState extends State<simpleCalculator> {
+    buttonPressed(  String buttonText){
+        setState(() {
+          if(buttonText=="C"){
+              equation='0';
+              result='0'; 
+              equationFontSize = 38.0;
+              resultFontSize = 48.0;
+          }
+          else if (buttonText=="del"){
+            equationFontSize = 48.0;
+            resultFontSize = 38.0;
+              equation=equation.substring(0,equation.length-1);
+              if(equation==''){
+                equation="0";
+              }
+          }
+          else if (buttonText=="="){
+            
+            equationFontSize = 38.0;
+            resultFontSize = 48.0;
+            expression=equation;
+            try{
+              Parser p=  Parser();
+              Expression exp=p.parse(expression);
+              ContextModel cm=ContextModel();
+              result='${exp.evaluate(EvaluationType.REAL, cm)}';
+            }
+            catch(e){
+              result="Error";
+            }
+          }
+          else {
+            if(equation=="0"){
+              equation=buttonText;
+            }else {
+            equation=equation + buttonText;
+            }
+          }
+          
+        });
+
+    }
+  String equation = "0";
+  String result = "0";
+  String expression = "";
+  double equationFontSize = 38.0;
+  double resultFontSize = 48.0;
   Widget buildButton(
       String buttonText, double buttonHeight, Color buttonColor) {
     // TextButton(style: ButtonStyle(padding: EdgeInsets.all(16.0)),onPressed: (){},child: Text(
@@ -42,7 +90,7 @@ class _simpleCalculatorState extends State<simpleCalculator> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: ()=> buttonPressed(buttonText),
             child: Text(
               buttonText,
               style: const TextStyle(
@@ -65,16 +113,16 @@ class _simpleCalculatorState extends State<simpleCalculator> {
           alignment: Alignment.centerRight,
           padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
           child: Text(
-            "0",
-            style: TextStyle(fontSize: 38.0),
+            equation,
+            style: TextStyle(fontSize: equationFontSize),
           ),
         ),
         Container(
           alignment: Alignment.centerRight,
           padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
           child: Text(
-            "0",
-            style: TextStyle(fontSize: 48.0),
+            result,
+            style: TextStyle(fontSize:resultFontSize),
           ),
         ),
         Expanded(
@@ -90,7 +138,7 @@ class _simpleCalculatorState extends State<simpleCalculator> {
                 children: [
                   TableRow(children: [
                     buildButton("C", 1, Colors.redAccent),
-                    buildButton("⌫", 1, Colors.blue),
+                    buildButton("del", 1, Colors.blue),
                     buildButton("/", 1, Colors.blue),
                   ]),
                   TableRow(children: [
