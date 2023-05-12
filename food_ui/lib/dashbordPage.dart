@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   @override
-  _ListItem(String foodName,String imgPath,String price,Color bgColor,Color color){
+  ListItem(String foodName,String imgPath,String price,Color bgColor,Color textColor){
     return Padding(
       padding:  EdgeInsets.only(left: 15),
       child: InkWell(
@@ -44,7 +46,21 @@ class _DashboardPageState extends State<DashboardPage> {
                     ), 
                   )
                    ),
-                   SizedBox(height: 25)
+                   SizedBox(height: 25),
+                   Text(
+                    foodName,
+                    style: GoogleFonts.notoSans(
+                          fontSize: 17,
+                          color: textColor,
+                          ),
+                   ),
+                   Text(
+                    '\$'+price,
+                    style: GoogleFonts.notoSans(
+                          fontSize: 17,
+                          color: textColor,
+                          ),
+                   ),
               ],
 
           ),
@@ -147,7 +163,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                          _ListItem('Hamburger','assets/burger.png','21', Color(0xFFFFE9C6), Color(0xFFDA9551))
+                          ListItem('Hamburger','assets/burger.png','21', Color(0xFFFFE9C6), Color(0xFFDA9551)),
+                          ListItem('Chips','assets/fries.png','15',   Color(0xFFC2E3FE), Color(0xFF6A8CAA)),
+                          ListItem('Dounuts','assets/doughnut.png','15',   Color(0xFFD7FADA), Color(0xFF56CC7E)),
 
                       ],
 
